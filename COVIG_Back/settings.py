@@ -51,6 +51,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Django Rest Framework 사용
+    'rest_framework',
+
+    # Cross-Origin-Resource-Sharing (Django 도메인 이외의 다른 도메인을 사용하기 위함)
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +67,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # CORS를 사용하기 위한 Middleware 설정
+    'corsheaders.middleware.CorsMiddleware'
+]
+
+# CORS를 통해 연결한 도메인 추가.
+# 현재는 Local에서 개발하기 때문에 Default 주소를 입력.
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
 ]
 
 ROOT_URLCONF = 'COVIG_Back.urls'
