@@ -57,6 +57,9 @@ INSTALLED_APPS = [
 
     # Cross-Origin-Resource-Sharing (Django 도메인 이외의 다른 도메인을 사용하기 위함)
     'corsheaders',
+
+    # App
+    'API',
 ]
 
 MIDDLEWARE = [
