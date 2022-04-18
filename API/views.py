@@ -86,4 +86,45 @@ class CovidBasicInfo(APIView):
         result['data'] = dict_data
 
         return JsonResponse(result)
-       
+
+
+class CovidRegionInfo(APIView):
+    '''
+        지역별 코로나 감염 정보를 가져온다
+    '''
+
+    API_KEY = settings.COVID_DATA_API_KEY
+
+    def get(self, request):
+
+        result = InitResult()
+
+        url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
+
+        currentDate = DT.datetime.now().date()
+        str_CurrentDate = DT.datetime.strftime(currentDate, '%Y%m%d')
+
+        parameter = {
+            'serviceKey': requests.utils.unquote(self.API_KEY),
+            'startCreateDt': str_CurrentDate,
+            'endCreateDt': str_CurrentDate
+        }
+
+        # 공공 API 가져오기
+        try:
+            response = requests.get(url, params=parameter, headers={'User-agent': 'Mozilla/5.0'})
+            content = response.text
+        except requests.exceptions.Timeout as TO:
+            result['message'] = "TimeOut Error : " + TO.strerror
+        except requests.exceptions.ConnectionError as CE:
+            result['message'] = "Connection Error : " + CE.strerror
+        else:
+            result['success'] = True
+
+        # XML 형태이기 때문에 Parsing 작업
+        dict_data = xmltodict.parse(content)
+        dict_data = dict_data['response']['body']['items']['item']
+
+        result['data'] = dict_data
+
+        return JsonResponse(result)
