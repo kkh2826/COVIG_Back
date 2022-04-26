@@ -101,9 +101,14 @@ class CovidRegionInfo(APIView):
 
         url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
 
-        currentDate = DT.datetime.now().date()
+        now = DT.datetime.now()
+
+        currentDate = now.date()
         str_CurrentDate = DT.datetime.strftime(currentDate, '%Y%m%d')
 
+        str_PrevCurrentDate = DT.datetime.strftime(currentDate - RD(days=1), '%Y%m%d')
+        str_CurrentDate = str_PrevCurrentDate if now.hour < 10 and now.minute < 31 else str_CurrentDate
+        
         parameter = {
             'serviceKey': requests.utils.unquote(self.API_KEY),
             'startCreateDt': str_CurrentDate,
