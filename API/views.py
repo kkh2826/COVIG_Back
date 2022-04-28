@@ -1,3 +1,4 @@
+from time import strptime
 from warnings import catch_warnings
 from rest_framework.views import APIView
 from django.http import JsonResponse
@@ -98,20 +99,25 @@ class CovidRegionInfo(APIView):
     def get(self, request):
 
         result = InitResult()
+        isInvalidTime = False
 
         url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
 
         now = DT.datetime.now()
 
-        currentDate = now.date()
-        str_CurrentDate = DT.datetime.strftime(currentDate, '%Y%m%d')
+        if now.hour < 10:
+            if now.minute < 31:
+                isInvalidTime = True
 
-        str_PrevCurrentDate = DT.datetime.strftime(currentDate - RD(days=1), '%Y%m%d')
-        str_CurrentDate = str_PrevCurrentDate if now.hour < 10 and now.minute < 31 else str_CurrentDate
+        currentDate = now.date()
+        str_CurrentDate = DT.datetime.strftime(currentDate - RD(days=1), '%Y%m%d') if isInvalidTime == True else DT.datetime.strftime(currentDate, '%Y%m%d')
+
+        prevDate = currentDate - DT.timedelta(days=1)
+        str_PrevCurrentDate = DT.datetime.strftime(prevDate, '%Y%m%d')
         
         parameter = {
             'serviceKey': requests.utils.unquote(self.API_KEY),
-            'startCreateDt': str_CurrentDate,
+            'startCreateDt': str_PrevCurrentDate,
             'endCreateDt': str_CurrentDate
         }
 
@@ -129,6 +135,14 @@ class CovidRegionInfo(APIView):
         # XML 형태이기 때문에 Parsing 작업
         dict_data = xmltodict.parse(content)
         dict_data = dict_data['response']['body']['items']['item']
+
+        seperateIdx = int(len(dict_data)/2)
+
+        # 사망자 수 차이를 구하기 위한 필드 추가 작업
+        for idx in range(seperateIdx):
+            dict_data[idx]["diffDeathCnt"] = int(dict_data[idx]['deathCnt']) - int(dict_data[idx + seperateIdx]['deathCnt'])
+
+        dict_data = dict_data[:seperateIdx]
 
         result['data'] = dict_data
 
