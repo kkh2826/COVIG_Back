@@ -24,6 +24,17 @@ def InitResult():
 
     return result
 
+def DecideInvalidTime():
+    
+    isInvalidTime = False
+    now = DT.datetime.now()
+
+    if now.hour < 10:
+        isInvalidTime = True
+        if now.hour == 9 and now.minute < 31:
+            isInvalidTime = isInvalidTime = True
+        
+
 class CovidBasicInfo(APIView):
     '''
         Covid-19정보를 가져온다.
@@ -99,21 +110,22 @@ class CovidRegionInfo(APIView):
     def get(self, request):
 
         result = InitResult()
+        invalidTime = '09:31:00'
         isInvalidTime = False
 
         url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
 
         now = DT.datetime.now()
+        now_time = now.strftime("%H:%M:%S")
 
-        if now.hour < 10:
-            if now.minute < 31:
-                isInvalidTime = True
+        isInvalidTime = True if now_time < invalidTime else False
 
         currentDate = now.date()
         str_CurrentDate = DT.datetime.strftime(currentDate - RD(days=1), '%Y%m%d') if isInvalidTime == True else DT.datetime.strftime(currentDate, '%Y%m%d')
 
-        prevDate = currentDate - DT.timedelta(days=1)
+        prevDate = DT.datetime.strptime(str_CurrentDate, '%Y%m%d') - DT.timedelta(days=1)
         str_PrevCurrentDate = DT.datetime.strftime(prevDate, '%Y%m%d')
+        
         
         parameter = {
             'serviceKey': requests.utils.unquote(self.API_KEY),
