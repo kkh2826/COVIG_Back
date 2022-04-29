@@ -155,6 +155,7 @@ class CovidRegionInfo(APIView):
             dict_data[idx]["diffDeathCnt"] = int(dict_data[idx]['deathCnt']) - int(dict_data[idx + seperateIdx]['deathCnt'])
 
         dict_data = dict_data[:seperateIdx]
+        dict_data = sorted(dict_data, key=lambda data: data['gubun'])
 
         result['data'] = dict_data
 
