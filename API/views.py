@@ -1,5 +1,3 @@
-from time import strptime
-from warnings import catch_warnings
 from rest_framework.views import APIView
 from django.http import JsonResponse
 
@@ -11,7 +9,6 @@ import xmltodict
 import datetime as DT
 from dateutil.relativedelta import relativedelta as RD
 
-import json
 
 # Create your views here.
 
@@ -24,16 +21,6 @@ def InitResult():
 
     return result
 
-def DecideInvalidTime():
-    
-    isInvalidTime = False
-    now = DT.datetime.now()
-
-    if now.hour < 10:
-        isInvalidTime = True
-        if now.hour == 9 and now.minute < 31:
-            isInvalidTime = isInvalidTime = True
-        
 
 class CovidBasicInfo(APIView):
     '''
