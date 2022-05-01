@@ -45,13 +45,20 @@ class CovidBasicInfo(APIView):
     def get(self, request):
 
         result = InitResult()
+        invalidTime = '09:31:00'
+        isInvalidTime = False
+
+        now = DT.datetime.now()
+        now_time = now.strftime("%H:%M:%S")
+
+        isInvalidTime = True if now_time < invalidTime else False
 
         url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson"
 
-        currentDate = DT.datetime.now().date()
+        currentDate = now.date()
 
-        str_CurrentDate = DT.datetime.strftime(currentDate, '%Y%m%d')
-        str_StartDate = DT.datetime.strftime(currentDate - RD(months=1) - RD(days=1), '%Y%m%d')
+        str_CurrentDate = DT.datetime.strftime(currentDate - RD(days=1), '%Y%m%d') if isInvalidTime == True else DT.datetime.strftime(currentDate, '%Y%m%d')
+        str_StartDate = DT.datetime.strftime(DT.datetime.strptime(str_CurrentDate, '%Y%m%d') - RD(months=1) - RD(days=1), '%Y%m%d')
         str_EndDate = str_CurrentDate
 
         parameter = {
