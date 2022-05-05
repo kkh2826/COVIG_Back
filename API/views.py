@@ -7,6 +7,7 @@ import requests
 import xmltodict
 
 import datetime as DT
+from pytz import timezone
 from dateutil.relativedelta import relativedelta as RD
 
 
@@ -35,7 +36,7 @@ class CovidBasicInfo(APIView):
         invalidTime = '09:31:00'
         isInvalidTime = False
 
-        now = DT.datetime.now()
+        now = DT.datetime.now(timezone('Asia/Seoul'))
         now_time = now.strftime("%H:%M:%S")
 
         isInvalidTime = True if now_time < invalidTime else False
@@ -109,7 +110,7 @@ class CovidRegionInfo(APIView):
 
         url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
 
-        now = DT.datetime.now()
+        now = DT.datetime.now(timezone('Asia/Seoul'))
         now_time = now.strftime("%H:%M:%S")
 
         isInvalidTime = True if now_time < invalidTime else False
