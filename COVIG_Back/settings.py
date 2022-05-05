@@ -81,7 +81,8 @@ MIDDLEWARE = [
 # CORS를 통해 연결한 도메인 추가.
 # 현재는 Local에서 개발하기 때문에 Default 주소를 입력.
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://covig.vercel.app:80'
 ]
 
 ROOT_URLCONF = 'COVIG_Back.urls'
