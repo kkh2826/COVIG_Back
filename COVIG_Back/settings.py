@@ -41,7 +41,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     ".ap-northeast-2.compute.amazonaws.com",
-    ".vercel.app"
+    ".vercel.app",
+    ".covigback.com"
 ]
 
 
@@ -82,7 +83,7 @@ MIDDLEWARE = [
 # 현재는 Local에서 개발하기 때문에 Default 주소를 입력.
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'http://covig.vercel.app:80'
+    'https://covig.vercel.app:443'
 ]
 
 ROOT_URLCONF = 'COVIG_Back.urls'
