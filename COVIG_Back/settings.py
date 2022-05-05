@@ -40,7 +40,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ".ap-northeast-2.compute.amazoneaws.com"
+    ".ap-northeast-2.compute.amazonaws.com"
 ]
 
 
