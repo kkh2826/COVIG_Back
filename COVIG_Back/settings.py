@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from pickle import TRUE
 from django.core.exceptions import ImproperlyConfigured
 import json
 
@@ -79,11 +80,14 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 # CORS를 통해 연결한 도메인 추가.
 # 현재는 Local에서 개발하기 때문에 Default 주소를 입력.
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'https://covig.vercel.app:443'
+    'https://covig.vercel.app:443',
+    'https://covig-po4tion.vercel.app:443'
 ]
 
 ROOT_URLCONF = 'COVIG_Back.urls'
